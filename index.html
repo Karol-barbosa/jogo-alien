@@ -10,11 +10,11 @@
 
 <body>
     <script>
-        // o que acontece aqui?
+        // define a largura e altura do jogo
         const larguraJogo = 700;
         const alturaJogo = 850;
 
-        // o que essa parte faz?
+        // configurações do jogo
         const config = {
             type: Phaser.AUTO,
             width: larguraJogo,
@@ -28,7 +28,7 @@
                     debug: false
                 }
             },
-
+        // define as funções do jogo
             scene: {
                 preload: preload,
                 create: create,
@@ -39,43 +39,52 @@
     
         const game = new Phaser.Game(config);
          // cria uma variável
-         var alien;
-         var teclado;
-         var fogo;
-         var plataforma;
-         var moeda;
-         var pontuacao = 0;
-         var placar;
-         var sol;
+         var alien; // variável para o alienigena
+         var teclado; // variável para o teclado
+         var fogo; // variável para o fogo
+         var plataforma; // variável para a plataforma
+         var moeda; // variável para a moeda
+         var pontuacao = 0; // variável para a pontuação
+         var placar; // variável para o placar
+         var sol; // variável para o sol
 
         function preload() {
         // carrega as imagens
-            this.load.image('background', 'assets/bg.png');
-            this.load.image('alien', 'assets/alienigena.png');
-            this.load.image('turbo_nave', 'assets/turbo.png');
-            this.load.image('plataforma_tijolo', 'assets/tijolos.png');
-            this.load.image('moeda', 'assets/moeda.png');
-            this.load.image('sol', 'assets/sol.png');
+            this.load.image('background', 'assets/bg.png'); //imagem de fundo
+            this.load.image('alien', 'assets/alienigena.png'); //imagem do alienigena
+            this.load.image('turbo_nave', 'assets/turbo.png'); //imagem do fogo
+            this.load.image('plataforma_tijolo', 'assets/tijolos.png'); //imagem da plataforma
+            this.load.image('moeda', 'assets/moeda.png'); //imagem da moeda
+            this.load.image('sol', 'assets/sol.png'); //imagem do sol
         }
 
         function create() {
-            // o que acontece aqui?
+            // Adiciona o fundo do jogo no centro da tela
             this.add.image(larguraJogo/2, alturaJogo/2, 'background');
+
             //cria o alienigena
             alien = this.physics.add.sprite(larguraJogo/2, 0, 'alien');
             alien.setCollideWorldBounds(true);
+
+            //cria as setas teclado
             teclado = this.input.keyboard.createCursorKeys();
+
+        // Cria uma plataforma fixa no centro da tela
             plataforma = this.physics.add.staticImage(larguraJogo/2, alturaJogo/2, 'plataforma_tijolo');
             this.physics.add.collider(alien,plataforma);
+
+            //cria a moeda
             moeda = this.physics.add.sprite(larguraJogo/2, 0, 'moeda');
             moeda.setCollideWorldBounds(true);
             moeda.setBounce(0.7);
             this.physics.add.collider(moeda,plataforma);
+
+            //cria o sol (obstáculo)
             sol = this.physics.add.staticGroup();
             let solObjeto = sol.create(600, 200, 'sol').setScale(0.2).refreshBody();
             solObjeto.body.setSize(solObjeto.width * 0.1, solObjeto.height * 0.1);
 
-
+            // Habilita colisões entre o alien e o sol
             this.physics.add.collider(alien, sol);
             this.physics.add.collider(moeda, sol);
             
@@ -121,14 +130,17 @@
 
             //atualiza a posção do fogo embaixo do alien
             fogo.setPosition(alien.x, alien.y + alien.height/2);
-                
+
+
+            // Função para ativar o turbo (mostrar fogo)
             function ativarTurbo() {
                 fogo.setVisible(true);
             }
-        
+        // Função para desativar o turbo (esconder fogo)
             function semTurbo(){
                 fogo.setVisible(false);
             }
+
 
         }
     </script>
